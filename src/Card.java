@@ -5,8 +5,7 @@ import java.awt.Color;
 public class Card extends GraphicsGroup{
     private String name;
     private int value;
-    private int x;
-    private int y;
+    
     
     /**
      * creates a card object with a name and a value of points
@@ -68,4 +67,14 @@ public class Card extends GraphicsGroup{
         faceCard.setFillColor(Color.red);
         this.add(faceCard);
     }
+
+    public double getMaxX(){
+        return (this.getX() + 50);
+    }
+
+    public double getMaxY(){
+        return (this.getY() + 50);
+    }
+
+    
 }
