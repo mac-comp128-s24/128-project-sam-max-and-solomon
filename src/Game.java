@@ -1,11 +1,14 @@
 import java.awt.Color;
 import java.util.ArrayList;
-
+import java.util.Arrays;
+import java.util.Random;
 import edu.macalester.graphics.CanvasWindow;
 import edu.macalester.graphics.GraphicsObject;
 import edu.macalester.graphics.GraphicsText;
 import edu.macalester.graphics.Point;
 import edu.macalester.graphics.events.MouseButtonEvent;
+import java.awt.Toolkit;
+import java.util.HashMap;
 
 public class Game {
 
@@ -13,7 +16,12 @@ private ArrayList<Card> cardDeck;
 private CanvasWindow canvas;
 private int score;
 private GraphicsText ui;
+private ArrayList<String> names = new ArrayList<String>(Arrays.asList("A", "A", "B", "B",
+"C", "C", "D", "D", "E", "E", "F", "F", "G", "G", "H", "H", "I", "I", "J", "J", "K", "K", "L", "L",
+"M", "M", "N", "N", "O", "O", "P", "P", "Q", "Q", "R", "R")); //Placeholder for names
 private ArrayList<Card> flippedCards;
+private final int WINDOW_WIDTH = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+private final int WINDOW_HEIGHT = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 
     public static void main(String[] args){
         Game g = new Game();
@@ -23,9 +31,12 @@ private ArrayList<Card> flippedCards;
     public Game(){
         cardDeck = new ArrayList(36);
         flippedCards = new ArrayList(2);
-        canvas = new CanvasWindow("Memory Match", 500, 500);
+        canvas = new CanvasWindow("Memory Match", WINDOW_WIDTH, WINDOW_HEIGHT);
     }
 
+    /**
+     * generates a deck of 36 cards, adds them to the canvas, handles click, adds UI
+     */
     private void run(){
         generateDeck();
         for (Card card: cardDeck){
@@ -43,16 +54,16 @@ private ArrayList<Card> flippedCards;
      * @param event
      */
     private void handleClick(MouseButtonEvent event){
-        System.out.println("Click detected");
-        if (flippedCards.size() == 2){  
-            System.out.println(flippedCards.get(0).getName() + flippedCards.get(1).getName()); 
+        if (flippedCards.size() == 2){   
             checkMatch(flippedCards.get(0), flippedCards.get(1));
         }
         else{
             for (Card card : cardDeck){
                 if (checkBounds(event.getPosition(), card)){
                     card.flip();
-                    flippedCards.add(card);
+                    if (!flippedCards.contains(card)){
+                        flippedCards.add(card);
+                    }
             }
         }
     }
@@ -67,8 +78,8 @@ private ArrayList<Card> flippedCards;
         ui.setText("Points: " + score);
         ui.setFilled(true);
         ui.setFillColor(Color.BLACK);
-        ui.setFontSize(20);
-        ui.setPosition(50, 50);
+        ui.setFontSize(50);
+        ui.setPosition(WINDOW_WIDTH * 0.75, WINDOW_HEIGHT * 0.3);
         canvas.add(ui);
     }
 
@@ -76,13 +87,12 @@ private ArrayList<Card> flippedCards;
      * creates 36 cards
      */
     private void generateDeck(){
-        int y = 0;
+        int y = 10;
         for (int i = 0; i < 36; i++){
-            String name = "Card" + (i % 18);
-            Card card = new Card(name, i);
-            int x = 50 + (55 * (i % 6));
+            Card card = new Card(generateNames(names), i);
+            int x = 85 + (95 * (i % 6));
             if (i % 6 == 0){
-                y += 55;
+                y += 95;
             }
             card.setPosition(x, y);
             cardDeck.add(card);
@@ -104,8 +114,7 @@ private ArrayList<Card> flippedCards;
      * @param card2
      */
     private void checkMatch(Card card1, Card card2){
-        if (card1.getName().equals(card2.getName())){
-            System.out.println("Match detected");
+         if (card1.getName().equals(card2.getName())){
             score += card1.getValue();
             score += card2.getValue();
             canvas.remove(card1);
@@ -119,9 +128,14 @@ private ArrayList<Card> flippedCards;
         
         flippedCards.remove(card1);
         flippedCards.remove(card2);
-        
     }
 
+    /**
+     * checks if the click position is on a card
+     * @param eventPosition
+     * @param card
+     * @return
+     */
     private boolean checkBounds(Point eventPosition, Card card){
         if(eventPosition.getX() <= card.getMaxX() && eventPosition.getX() >= card.getX()){
             return (eventPosition.getY() <= card.getMaxY() && eventPosition.getY() >= card.getY());
@@ -131,5 +145,34 @@ private ArrayList<Card> flippedCards;
         }
     }
 
-    
+    //generates a name at random
+    private String generateNames(ArrayList<String> nameList){
+        Random random = new Random();
+        int choice = random.nextInt(0, names.size());
+        String name = names.get(choice);
+        names.remove(choice);
+        return name;
+    }
+
+    /**
+     * reshuffles the remaining deck
+     */
+    private void reshuffle(){
+        HashMap<String, Integer> remainingCards = new HashMap<String, Integer>();
+        int y = 10;
+        for (Card card : cardDeck){
+            canvas.remove(card);
+            remainingCards.put(card.getName(), card.getValue());
+        }
+        ArrayList<String> newNames = new ArrayList(Arrays.asList(remainingCards.keySet()));
+        for (int i = 0; i < cardDeck.size(); i++){
+            String name = generateNames(newNames);
+            Card card = new Card(name, remainingCards.get(name));
+            int x = 85 + (95 * (i % 6));
+            if (i % 6 == 0){
+                y += 95;
+            }
+            card.setPosition(x, y);
+        }
+    }
 }
