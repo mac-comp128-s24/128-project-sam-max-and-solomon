@@ -1,6 +1,6 @@
 *.class
 
-#Ignore Ket.txt for sake of keeping API Key private
+#Ignore Key.txt for sake of keeping API Key private
 Key.txt
 
 # Mobile Tools for Java (J2ME)
