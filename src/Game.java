@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import edu.macalester.graphics.CanvasWindow;
 import edu.macalester.graphics.GraphicsObject;
 import edu.macalester.graphics.GraphicsText;
+import edu.macalester.graphics.Point;
 import edu.macalester.graphics.events.MouseButtonEvent;
 
 public class Game {
@@ -43,16 +44,19 @@ private ArrayList<Card> flippedCards;
      */
     private void handleClick(MouseButtonEvent event){
         System.out.println("Click detected");
-        for (Card card : cardDeck){
-            if (event.getPosition().getX() <= card.getMaxX() || event.getPosition().getX() >= card.getPosition().getX()){
-                System.out.println("Card detected");
-                card.flip();
-                flippedCards.add(card);
-            }
-        }
-        if (flippedCards.size() == 2){
+        if (flippedCards.size() == 2){  
+            System.out.println(flippedCards.get(0).getName() + flippedCards.get(1).getName()); 
             checkMatch(flippedCards.get(0), flippedCards.get(1));
         }
+        else{
+            for (Card card : cardDeck){
+                if (checkBounds(event.getPosition(), card)){
+                    card.flip();
+                    flippedCards.add(card);
+            }
+        }
+    }
+        
     }
     
     /**
@@ -74,7 +78,7 @@ private ArrayList<Card> flippedCards;
     private void generateDeck(){
         int y = 0;
         for (int i = 0; i < 36; i++){
-            String name = "Card" + i;
+            String name = "Card" + (i % 18);
             Card card = new Card(name, i);
             int x = 50 + (55 * (i % 6));
             if (i % 6 == 0){
@@ -100,7 +104,8 @@ private ArrayList<Card> flippedCards;
      * @param card2
      */
     private void checkMatch(Card card1, Card card2){
-        if (card1.getName() == card2.getName()){
+        if (card1.getName().equals(card2.getName())){
+            System.out.println("Match detected");
             score += card1.getValue();
             score += card2.getValue();
             canvas.remove(card1);
@@ -108,8 +113,21 @@ private ArrayList<Card> flippedCards;
             updateUI();
         }
         else{
-            card1.setGraphics();
-            card2.setGraphics();
+            card1.resetGraphics(); 
+            card2.resetGraphics();
+        }
+        
+        flippedCards.remove(card1);
+        flippedCards.remove(card2);
+        
+    }
+
+    private boolean checkBounds(Point eventPosition, Card card){
+        if(eventPosition.getX() <= card.getMaxX() && eventPosition.getX() >= card.getX()){
+            return (eventPosition.getY() <= card.getMaxY() && eventPosition.getY() >= card.getY());
+        }
+        else{
+            return false;
         }
     }
 
