@@ -1,11 +1,14 @@
 import edu.macalester.graphics.GraphicsGroup;
+import edu.macalester.graphics.GraphicsText;
 import edu.macalester.graphics.Rectangle;
 import java.awt.Color;
 
 public class Card extends GraphicsGroup{
     private String name;
     private int value;
-    
+    private int WIDTH = 50;
+    private int HEIGHT = 50;
+    private GraphicsGroup flipGroup;
     
     /**
      * creates a card object with a name and a value of points
@@ -15,6 +18,7 @@ public class Card extends GraphicsGroup{
     public Card(String name, int value){
         this.name = name;
         this.value = value;
+        flipGroup = new GraphicsGroup(0,0);
     }
 
     /**
@@ -53,28 +57,45 @@ public class Card extends GraphicsGroup{
      * creates a plain rectangle representing the card
      */
     public void setGraphics(){
-        Rectangle base = new Rectangle(0, 0, 50, 50);
+        
+        Rectangle base = new Rectangle(0, 0, WIDTH, HEIGHT);
         base.setFilled(true);
         base.setFillColor(Color.BLACK);
         this.add(base);
+        
+    }
+
+    public void resetGraphics(){
+        this.remove(flipGroup);
+        setGraphics();
     }
 
     /**
      * changes the card to red
      */
     public void flip(){
-        Rectangle faceCard = new Rectangle(0, 0, 50, 50);
+        Rectangle faceCard = new Rectangle(0, 0, WIDTH, HEIGHT);
         faceCard.setFillColor(Color.red);
-        this.add(faceCard);
+        flipGroup.add(faceCard);
+
+        GraphicsText text = new GraphicsText(name);
+        text.setPosition(WIDTH / 2, HEIGHT / 2);
+        text.setFillColor(Color.BLACK);
+        flipGroup.add(text);
+
+        Rectangle textFrame = new Rectangle(WIDTH/2, HEIGHT/2, text.getWidth(), text.getHeight());
+        textFrame.setFilled(true);
+        textFrame.setFillColor(Color.WHITE);
+        flipGroup.add(textFrame);
+
+        this.add(flipGroup);
     }
 
     public double getMaxX(){
-        return (this.getX() + 50);
+        return (this.getX() + WIDTH);
     }
 
     public double getMaxY(){
-        return (this.getY() + 50);
-    }
-
-    
+        return (this.getY() + HEIGHT);
+    }    
 }
