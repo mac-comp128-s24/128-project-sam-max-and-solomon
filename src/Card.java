@@ -3,11 +3,12 @@ import edu.macalester.graphics.GraphicsText;
 import edu.macalester.graphics.Rectangle;
 import java.awt.Color;
 
+
 public class Card extends GraphicsGroup{
     private String name;
     private int value;
-    private int WIDTH = 50;
-    private int HEIGHT = 50;
+    private int WIDTH = 85;
+    private int HEIGHT = 85;
     private GraphicsGroup flipGroup;
     
     /**
@@ -79,14 +80,9 @@ public class Card extends GraphicsGroup{
         flipGroup.add(faceCard);
 
         GraphicsText text = new GraphicsText(name);
-        text.setPosition(WIDTH / 2, HEIGHT / 2);
+        text.setPosition(WIDTH/2, HEIGHT / 2);
         text.setFillColor(Color.BLACK);
         flipGroup.add(text);
-
-        Rectangle textFrame = new Rectangle(WIDTH/2, HEIGHT/2, text.getWidth(), text.getHeight());
-        textFrame.setFilled(true);
-        textFrame.setFillColor(Color.WHITE);
-        flipGroup.add(textFrame);
 
         this.add(flipGroup);
     }
