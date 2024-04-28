@@ -123,15 +123,18 @@ private final int WINDOW_HEIGHT = (int) Toolkit.getDefaultToolkit().getScreenSiz
             canvas.remove(card2);
             cardDeck.remove(card1);
             cardDeck.remove(card2);
-            updateUI();
+            
         }
         else{
             card1.resetGraphics(); 
             card2.resetGraphics();
+            score -= 5;
         }
         flippedCards.remove(card1);
         flippedCards.remove(card2);
+        updateUI();
         checkWin();  
+        
     }
 
     /**
@@ -159,10 +162,10 @@ private final int WINDOW_HEIGHT = (int) Toolkit.getDefaultToolkit().getScreenSiz
     }
 
     private void checkWin(){
-        if (canvas.){
+        if (cardDeck.size() == 0){
             GraphicsText text = new GraphicsText("You win!");
             text.setFontSize(100);
-            text.setPosition(WINDOW_HEIGHT/2, WINDOW_WIDTH/2);
+            text.setPosition(WINDOW_WIDTH/2, WINDOW_HEIGHT/2);
             canvas.add(text);
         }
     }
