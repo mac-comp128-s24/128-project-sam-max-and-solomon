@@ -39,16 +39,16 @@ public class Card extends GraphicsGroup{
     }
 
     /**
-     * gets name
-     * @return
+     *
+     * @return name of the card
      */
     public String getName(){
         return name;
     }
 
     /**
-     * gets value
-     * @return
+     * 
+     * @return score value of the card
      */
     public int getValue(){
         return value;
@@ -58,7 +58,6 @@ public class Card extends GraphicsGroup{
      * creates a plain rectangle representing the card
      */
     public void setGraphics(){
-        
         Rectangle base = new Rectangle(0, 0, WIDTH, HEIGHT);
         base.setFilled(true);
         base.setFillColor(Color.BLACK);
@@ -66,6 +65,9 @@ public class Card extends GraphicsGroup{
         
     }
 
+    /**
+     * removes the text and red from the group
+     */
     public void resetGraphics(){
         this.remove(flipGroup);
         setGraphics();
@@ -87,10 +89,18 @@ public class Card extends GraphicsGroup{
         this.add(flipGroup);
     }
 
+    /**
+     * 
+     * @return the maximum x value of the card
+     */
     public double getMaxX(){
         return (this.getX() + WIDTH);
     }
 
+    /**
+     * 
+     * @return the maximum y value of the card
+     */
     public double getMaxY(){
         return (this.getY() + HEIGHT);
     }    
