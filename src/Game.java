@@ -1,14 +1,16 @@
-import java.awt.Color;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Random;
+
 import edu.macalester.graphics.CanvasWindow;
-import edu.macalester.graphics.GraphicsObject;
 import edu.macalester.graphics.GraphicsText;
 import edu.macalester.graphics.Point;
 import edu.macalester.graphics.events.MouseButtonEvent;
+
+import java.awt.Color;
 import java.awt.Toolkit;
+
 import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
 
 public class Game {
 
@@ -119,15 +121,17 @@ private final int WINDOW_HEIGHT = (int) Toolkit.getDefaultToolkit().getScreenSiz
             score += card2.getValue();
             canvas.remove(card1);
             canvas.remove(card2);
+            cardDeck.remove(card1);
+            cardDeck.remove(card2);
             updateUI();
         }
         else{
             card1.resetGraphics(); 
             card2.resetGraphics();
         }
-        
         flippedCards.remove(card1);
         flippedCards.remove(card2);
+        checkWin();  
     }
 
     /**
@@ -152,6 +156,15 @@ private final int WINDOW_HEIGHT = (int) Toolkit.getDefaultToolkit().getScreenSiz
         String name = names.get(choice);
         names.remove(choice);
         return name;
+    }
+
+    private void checkWin(){
+        if (canvas.){
+            GraphicsText text = new GraphicsText("You win!");
+            text.setFontSize(100);
+            text.setPosition(WINDOW_HEIGHT/2, WINDOW_WIDTH/2);
+            canvas.add(text);
+        }
     }
 
     /**
