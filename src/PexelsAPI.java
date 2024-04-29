@@ -38,7 +38,7 @@ public class PexelsAPI {
             return parseImageUrlsFromJson(responseBody);
         } else {
             System.out.println("HTTP Request Failed with Status Code: " + response.statusCode());
-            // Handle other status codes if needed
+
             return new ArrayList<>(); // Return empty list on failure
         }
     }
