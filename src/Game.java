@@ -46,7 +46,6 @@ private final int WINDOW_HEIGHT = (int) Toolkit.getDefaultToolkit().getScreenSiz
             canvas.add(card);
         }
         canvas.onMouseDown(event -> handleClick(event));
-        
         addUI();
         canvas.draw();
     }
@@ -161,6 +160,9 @@ private final int WINDOW_HEIGHT = (int) Toolkit.getDefaultToolkit().getScreenSiz
         return name;
     }
 
+    /**
+     * checks if the game is over by cardDeck size, then add congratulatory text to the canvas
+     */
     private void checkWin(){
         if (cardDeck.size() == 0){
             GraphicsText text = new GraphicsText("You win!");
